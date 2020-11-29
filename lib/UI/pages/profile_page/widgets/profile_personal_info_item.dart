@@ -11,6 +11,7 @@ enum PersonalInfoType {
   startDate,
 }
 
+// ignore: must_be_immutable
 class ProfilePersonalInfoItem extends StatelessWidget {
   final String title;
   final String value;
@@ -22,7 +23,7 @@ class ProfilePersonalInfoItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 3, bottom: 3),
+      padding: const EdgeInsets.only(top: 4),
       child: Container(
         color: AppColors.white,
         child: Row(
@@ -30,7 +31,7 @@ class ProfilePersonalInfoItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Text(
                 title,
                 style: TextStyle(
@@ -40,7 +41,7 @@ class ProfilePersonalInfoItem extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Text(
                 value,
                 style: TextStyle(

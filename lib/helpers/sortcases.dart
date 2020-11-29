@@ -30,7 +30,7 @@ extension Comparators on SortVar {
       case SortVar.status:
         return "Статус";
       case SortVar.uniq:
-        return "Уникатьность";
+        return "Уникальность";
       case SortVar.date:
         return "Дата";
     }

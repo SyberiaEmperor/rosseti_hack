@@ -1,9 +1,6 @@
-import 'dart:collection';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:rosseti/UI/classes/responsive_size.dart';
 import 'package:rosseti/repos/entities/profile_temp_repository.dart';
 
 import 'profile_personal_info_item.dart';

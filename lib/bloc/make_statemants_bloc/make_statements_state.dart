@@ -12,6 +12,16 @@ class TypeOfIncidentChoiceState extends MakeStatementsState {
   TypeOfIncidentChoiceState(int step) : super(step);
 }
 
+class ErrorState extends MakeStatementsState {
+  ErrorState(int step) : super(step);
+}
+
+class InformState extends MakeStatementsState{
+  final int percent;
+  final List<RegistryItem> items;
+  InformState(int step, this.percent, this.items) : super(step);
+}
+
 class InternetStepState extends MakeStatementsState {
   InternetStepState(int step) : super(step);
 }

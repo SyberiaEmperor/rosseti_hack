@@ -21,7 +21,7 @@ class DocumentItem extends StatelessWidget {
       color: Colors.white,
       child: GestureDetector(
         onTap: (){
-          //TODO нажать на документ
+
         },
         child: Text(
           title,

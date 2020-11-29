@@ -1,7 +1,6 @@
 import 'package:rosseti/helpers/requests/requests.dart' as requests;
 import 'package:rosseti/models/profile.dart';
 import 'package:rosseti/repos/models/repository.dart';
-import 'package:rosseti/helpers/validators.dart' as vd;
 
 class ProfileRepository extends Repository<Profile> {
   final AuthenticationRepository authenticationRepository;
@@ -34,8 +33,7 @@ class ProfileRepository extends Repository<Profile> {
   Future<void> persistData(Profile profile) async {
     _validateProfile(profile);
     try {
-      await requests.sendProfile(profile);
-      _profile = profile;
+      _profile = await requests.sendProfile(profile);
     } on requests.ExpiredToken {
       await requests.updateToken(
           authenticationRepository.login, authenticationRepository.password);

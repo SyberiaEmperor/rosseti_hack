@@ -2,17 +2,20 @@ library requests;
 
 import 'dart:async';
 import 'dart:convert';
+
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dio/dio.dart' as dio;
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:rosseti/models/application.dart';
 import 'package:rosseti/models/message.dart';
 import 'package:rosseti/models/profile.dart';
 import 'package:rosseti/models/registry_item.dart';
 part 'profile_rest_helper.dart';
 part 'authenticated_rest_helper.dart';
-part 'news_rest_helper.dart';
+part 'application_rest_helper.dart';
 
 class SendingDataFailure implements Exception {}
 
@@ -86,8 +89,37 @@ Future<List<Message>> getHistory({@required int id, @required int page}) async {
   }
 }
 
-Future<List<RegistryItem>> getStatements() async {
-  return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-      .map((e) => RegistryItem.test(e))
+Future<void> like(int id) async {
+  await http.put("${url}applications/like",
+      headers: {
+        HttpHeaders.authorizationHeader: token,
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.acceptHeader: '*'
+      },
+      body: jsonEncode({"id": id}));
+}
+
+Future<void> dislike(int id) async {
+  await http.put("${url}applications/dislike",
+      headers: {
+        HttpHeaders.authorizationHeader: token,
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.acceptHeader: '*'
+      },
+      body: jsonEncode({"id": id}));
+}
+
+Future<List<RegistryItem>> getStatements(Profile profile) async {
+  List<RegistryItem> result = [];
+  http.Response response = await http.get("${url}applications", headers: {
+    HttpHeaders.authorizationHeader: token,
+  });
+  result = (jsonDecode(response.body) as List<dynamic>)
+      .map((data) => RegistryItem.fromData(data, profile.id))
       .toList();
+  return result;
+  //Tecтовый набор
+  // return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  //     .map((e) => RegistryItem.test(e))
+  //     .toList();
 }

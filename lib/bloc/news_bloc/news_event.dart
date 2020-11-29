@@ -1,11 +1,16 @@
 import 'package:meta/meta.dart';
 import 'package:rosseti/helpers/sortcases.dart';
+import 'package:rosseti/models/profile.dart';
 import 'package:rosseti/models/registry_item.dart';
 
 @immutable
 abstract class NewsEvent {}
 
-class Update extends NewsEvent {}
+class Update extends NewsEvent {
+  final Profile profile;
+
+  Update(this.profile);
+}
 
 class Search extends NewsEvent {
   final String search;

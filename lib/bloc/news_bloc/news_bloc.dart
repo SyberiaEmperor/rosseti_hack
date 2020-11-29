@@ -17,10 +17,11 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   Direction currentDirection = Direction.all;
   SortVar sortVar = SortVar.popularity;
   Function sortFunc;
-  int vertic = 1;
-  void reOrderStatemets(List<RegistryItem> states) {
+  int vertic = -1;
+  List<RegistryItem> reOrderStatemets(List<RegistryItem> states) {
     states.sort(sortFunc);
-    if (vertic < 0) states = states.reversed;
+    if (vertic < 0) states = states.reversed.toList();
+    return states;
   }
 
   void changeParams(SelectSort event) {
@@ -37,27 +38,31 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       yield LoadingState("");
       registry.statements = [];
 
-      registry.statements = await getStatements();
+      registry.statements = await getStatements(event.profile);
 
       yield InitialNewsState(
           direction: currentDirection,
           statements: currentDirection == Direction.all
               ? registry.statements
               : registry.statements
-                  .where((element) => element.direction == currentDirection));
+                  .where((element) => element.direction == currentDirection)
+                  .toList());
     }
     if (event is SelectDirection) {
       yield LoadingState("");
       currentDirection = event.direction;
       yield InitialNewsState(
           direction: currentDirection,
-          statements: registry.statements
-              .where((element) => element.direction == currentDirection).toList());
+          statements: currentDirection == Direction.all
+              ? registry.statements
+              : registry.statements
+                  .where((element) => element.direction == currentDirection)
+                  .toList());
     }
     if (event is SelectSort) {
       yield LoadingState("");
       changeParams(event);
-      reOrderStatemets(registry.statements);
+      registry.statements = reOrderStatemets(registry.statements);
       yield InitialNewsState(
           direction: currentDirection, statements: registry.statements);
     }
@@ -65,7 +70,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       yield LoadingState("");
       currentDirection = Direction.all;
       var states = searchStrings(event.search, registry.statements);
-      reOrderStatemets(states);
+      states = reOrderStatemets(states);
       yield InitialNewsState(
           direction: currentDirection,
           sortVar: sortVar,

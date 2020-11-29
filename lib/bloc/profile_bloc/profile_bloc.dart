@@ -17,10 +17,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final AuthenticatedBloc _authenticatedBloc;
   StreamSubscription _authenticatedStreamSubscription;
 
-  ProfileBloc(this._profileRepository, this._profileTempRepository,
-      this._authenticatedBloc)
+  ProfileBloc(this._profileRepository, this._profileTempRepository, this._authenticatedBloc)
       : super(ProfileInitialState()) {
-    add(ProfileAuthenticatedEvent());
+   // add(ProfileAuthenticatedEvent());
     _authenticatedStreamSubscription = _authenticatedBloc.listen((state) {
       if (state is SingInState) {
         add(ProfileAuthenticatedEvent());
@@ -30,7 +29,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   @override
   Future<void> close() {
-    _authenticatedStreamSubscription.cancel();
+     _authenticatedStreamSubscription.cancel();
     return super.close();
   }
 
@@ -42,9 +41,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       yield* _mapAuthenticatedEventToState();
     } else if (event is ProfileSaveChangesEvent) {
       yield* _mapSaveChangesEventToState();
-    } else if(event is ProfileGeneralInfoSubmittedEvent){
-  
-    }
+    } else if (event is ProfileGeneralInfoSubmittedEvent) {}
   }
 
   Stream<ProfileState> _mapAuthenticatedEventToState() async* {
@@ -59,10 +56,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   Stream<ProfileState> _mapSaveChangesEventToState() async* {
-    yield ProfileLoadingState();
+    yield ProfileSavingState();
     try {
       await _profileRepository.persistData(_profileTempRepository.profile);
       yield ProfileSavedSuccessfullyState();
-    } on Exception catch (e) {}
+    } on Exception catch (e) {
+      yield ProfileErrorState("Ошибка загрузки профиля");
+    }
   }
 }

@@ -7,7 +7,8 @@ class SuggestionInfo extends StatelessWidget {
 
   SuggestionInfo(this.registryItem);
 
-  Widget _buildInfoRow(String title, String value, {bool isStatus = false, bool showPercentage = false}){
+  Widget _buildInfoRow(String title, String value,
+      {bool isStatus = false, bool showPercentage = false}) {
     return Container(
       margin: EdgeInsets.only(
         top: 5.height,
@@ -34,6 +35,7 @@ class SuggestionInfo extends StatelessWidget {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -47,12 +49,15 @@ class SuggestionInfo extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _buildInfoRow("Автор", registryItem.author),
+          _buildInfoRow("Автор",
+              "${registryItem.user.surname} ${registryItem.user.name} ${registryItem.user.secondName}"),
           _buildInfoRow("Статус", registryItem.status.asString, isStatus: true),
           _buildInfoRow("Дата создания", registryItem.dateString),
           _buildInfoRow("Поддержали", registryItem.numberAccepted.toString()),
-          _buildInfoRow("Уникальность", registryItem.uniq.toString(), showPercentage: true),
-          _buildInfoRow("Популярность", registryItem.popularity.toString(), showPercentage: true),
+          _buildInfoRow("Уникальность", registryItem.uniq.toString(),
+              showPercentage: true),
+          _buildInfoRow("Популярность", registryItem.popularity.toString(),
+              showPercentage: true),
         ],
       ),
     );

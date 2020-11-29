@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:rosseti/models/point.dart';
 
 class StatementRepos{
   String _incidentDescription;
@@ -9,7 +7,7 @@ class StatementRepos{
   List<File> _images;
   List<File> _videos;
   List<File> _documents;
-  static Point address = Point(caption: '',position: LatLng(0,0));
+
 
   void setIncidentDescription(String incidentDescription){
     _incidentDescription=incidentDescription;

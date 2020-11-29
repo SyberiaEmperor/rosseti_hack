@@ -75,7 +75,7 @@ class _InputFieldState extends State<InputField> {
             initialValue: widget.initialValue,
             style: TextStyle(
               decoration: TextDecoration.none,
-              fontFamily: Theme.of(context).textTheme.bodyText2.fontFamily,
+              fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily,
               color: Colors.black,
               fontSize: 16,
             ),
@@ -93,7 +93,7 @@ class _InputFieldState extends State<InputField> {
             decoration: InputDecoration(
               hintStyle: TextStyle(
                 color: Colors.black38,
-                fontFamily: Theme.of(context).textTheme.bodyText2.fontFamily,
+                fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily,
                 fontSize: 16,
               ),
               border: InputBorder.none,

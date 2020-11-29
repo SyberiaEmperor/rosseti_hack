@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:rosseti/UI/pages/chat_page/widgets/appbar_chat.dart';
 import 'package:rosseti/UI/pages/chat_page/widgets/list_of_messages_and_navbar_chat.dart';
+import 'package:rosseti/models/profile.dart';
 
 class Chat extends StatelessWidget {
-  //final User user;
+  final Profile profile;
   final int id;
+  final String topicName;
 
-  const Chat(/*this.user,*/ this.id, {Key key}) : super(key: key);
-  //TODO: Сделать что-нибудь с ним
+  const Chat(this.profile, this.id, this.topicName, {Key key})
+      : super(key: key);
   void showConnectionsStatus(BuildContext context, String content) {
     Scaffold.of(context).showSnackBar(
       SnackBar(
@@ -35,10 +37,10 @@ class Chat extends StatelessWidget {
         child: Scaffold(
           body: Column(
             children: <Widget>[
-              AppbarChat("Topic name name name name"),
+              AppbarChat(topicName),
               Expanded(
                 child: ListOfMessagesAndNavbarChat(
-                    id, 1, /* user,*/ showConnectionsStatus),
+                    id, profile, showConnectionsStatus),
               ),
             ],
           ),

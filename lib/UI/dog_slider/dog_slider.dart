@@ -42,7 +42,6 @@ class _DogSliderState extends State<DogSlider> with TickerProviderStateMixin {
   AnimationController _ballAnim;
   double _slidePosX = 0;
   double _sliderValue = 0;
-  // double _dogWidth = 100;
   Ticker _dogTicker;
   MovingCharacterPhysics2d _dogPhysics;
   DogFlareControls _dogController;

@@ -1,86 +1,98 @@
-import 'dart:typed_data';
-import 'package:rosseti/helpers/validators.dart' as vd;
-import 'package:rosseti/models/profile.dart';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:rosseti/helpers/requests/requests.dart';
+import 'package:rosseti/models/application.dart';
+import 'package:rosseti/models/author.dart';
+import 'package:rosseti/models/expense.dart';
+import 'package:rosseti/models/stage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ApplicationTempRepository {
-//   String name = '';
-//   String surname = '';
-//   String fathername = '';
-//   String email = '';
-//   String passportSeries = '';
-//   String passportNumber = '';
-//   String inn = '';
-//   String address = '';
-//   int taxSystem = -1;
-//   String _phone='';
-//   String get phone=>_phone;
-  
-//   String firstPage;
-//   String secondPage;
-//   String avatar;
+  static ApplicationTempRepository instance;
+  ApplicationTempRepository._();
+  factory ApplicationTempRepository() {
+    if (instance == null) {
+      instance = ApplicationTempRepository._();
+    }
+    return instance;
+  }
+  String mainAuthor ='';
+  String title = '';
+  String category = '';
+  String problem = '';
+  String decision = '';
+  String impact = '';
+  List<Expense> expenses = [];
+  List<Stage> stages = [];
+  List<Author> otherAuthors = [];
+  bool economy = false;
+  File file;
 
-//  void clear() {
-//     name = '';
-//     surname = '';
-//     fathername = '';
-//     email = '';
-//     passportSeries = '';
-//     passportNumber = '';
-//     inn = '';
-//     address = '';
-//     taxSystem = -1;
-//     _phone = '';
-//   }
+  Future<void> persistData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("application", jsonEncode(application.toJson()));
+  }
 
+  void clear() {
+    title = '';
+    category = '';
+    problem = '';
+    decision = '';
+    impact = '';
+    expenses = [];
+    stages = [];
+    otherAuthors = [];
+    economy = false;
+    file = null;
+  }
 
+  Future<bool> sendToServer() async {
+    try {
+      await sendApplication(application);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.remove("application");
+      clear();
+      return true;
+    } on Exception catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
 
+  void uploadData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('application'))
+      getDataFromApplication(
+          Application.fromJson(jsonDecode(prefs.getString('application'))));
+  }
 
-//   String getTaxForm() {
-//     switch (taxSystem) {
-//       case 1:
-//         return 'Самозанятый';
-//       case 2:
-//         return 'Физическое лицо';
-//       case 3:
-//         return 'УСН 6%';
-//       case 4:
-//         return 'УСН 15%';
-//       case 5:
-//         return 'Общая';
-//       default:
-//         return 'Форма налогооблажения';
-//     }
-//   }
+  void getDataFromApplication(Application app) {
+    title = app.title;
+    category = app.category;
+    problem = app.problem;
+    decision = app.decision;
+    impact = app.impact;
+    expenses = app.expenses;
+    stages = app.stages;
+    otherAuthors = app.other_authors;
+    economy = app.economy;
+    mainAuthor = app.mainAuthor;
+    file = app.filePath != null ? File(app.filePath) : null;
+  }
 
-//    Profile get profile=>Profile(
-//     name:name,
-//     surname:surname,
-//     fathername: fathername,
-//     email: email,
-//     passportNumber: passportNumber,
-//     passportSeries: passportSeries,
-//     firstPage: firstPage,
-//     secondPage: secondPage,
-//     inn: inn,
-//     address: address,
-//     taxSystem: taxSystem,
-//     avatar: avatar,
-//   );
-
-
-//   void getDataFromProfile(Profile profile) {
-//     name = profile.name;
-//     surname = profile.surname;
-//     fathername = profile.fathername;
-//     email = profile.email;
-//     passportSeries = profile.passportSeries;
-//     passportNumber = profile.passportNumber;
-//     inn = profile.inn;
-//     address = profile.address;
-//     taxSystem = profile.taxSystem;
-//     firstPage= profile.firstPage;
-//     secondPage=profile.secondPage;
-//     avatar=profile.avatar;
-//     _phone=profile.phone;
-//   }
+  Application get application => Application(
+        title: title,
+        category: category,
+        problem: problem,
+        decision: decision,
+        impact: impact,
+        expenses: expenses,
+        stages: stages,
+        other_authors: otherAuthors,
+        economy: economy,
+        mainAuthor: mainAuthor,
+        filePath: file!=null?file.path:null,
+        fileUrl: file!=null?file.path:'',
+      );
 }

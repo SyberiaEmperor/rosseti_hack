@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rosseti/UI/classes/responsive_size.dart';
+import 'package:rosseti/UI/pages/chat_page/chat_page.dart';
 import 'package:rosseti/models/registry_item.dart';
+import 'package:rosseti/repos/entities/profile_repository.dart';
 
-class SuggestionNavbar extends StatefulWidget {
+class SuggestionNavbar extends StatelessWidget {
   final RegistryItem registryItem;
+  final Function() onDislike;
+  final Function() onLike;
+  SuggestionNavbar(this.registryItem, {this.onDislike, this.onLike});
 
-  SuggestionNavbar(this.registryItem);
-
-  @override
-  _SuggestionNavbarState createState() => _SuggestionNavbarState();
-}
-
-class _SuggestionNavbarState extends State<SuggestionNavbar> {
-  bool liked = false;
   @override
   Widget build(BuildContext context) {
-    
+    bool liked = registryItem.isLiked;
     return Container(
       height: 88.height,
       decoration: BoxDecoration(
@@ -35,7 +33,17 @@ class _SuggestionNavbarState extends State<SuggestionNavbar> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           GestureDetector(
-            onTap: (){},
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Chat(
+                            RepositoryProvider.of<ProfileRepository>(context)
+                                .currentData,
+                            registryItem.chatID,
+                            registryItem.title,
+                          )));
+            },
             child: Container(
               alignment: Alignment.center,
               width: 212.width,
@@ -60,11 +68,12 @@ class _SuggestionNavbarState extends State<SuggestionNavbar> {
             width: 5.width,
           ),
           GestureDetector(
-            onTap: () {
-              //TODO поменять liked
-              setState(() {
-                liked = true;
-              });
+            onTap: () async {
+              if (liked) {
+                onDislike();
+              } else {
+                onLike();
+              }
             },
             child: AnimatedContainer(
               duration: Duration(milliseconds: 200),
@@ -77,7 +86,7 @@ class _SuggestionNavbarState extends State<SuggestionNavbar> {
               ),
               child: Icon(
                 liked ? Icons.check_circle_outline_rounded : Icons.thumb_up,
-                color: liked ? Colors.black: Colors.white,
+                color: liked ? Colors.black : Colors.white,
                 size: 25.height,
               ),
             ),

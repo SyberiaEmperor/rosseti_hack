@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:rosseti/UI/classes/custom_scroll_behavior.dart';
 import 'package:rosseti/UI/classes/responsive_size.dart';
 import 'package:rosseti/UI/pages/suggestion_page/widgets/navbar.dart';
@@ -8,15 +9,32 @@ import 'package:rosseti/UI/widgets/pop_back_button.dart';
 import 'package:rosseti/UI/widgets/share_button.dart';
 import 'package:rosseti/models/registry_item.dart';
 
-class SuggestionPage extends StatelessWidget {
+class SuggestionPage extends StatefulWidget {
   final RegistryItem registryItem;
 
   SuggestionPage(this.registryItem);
+
+  @override
+  _SuggestionPageState createState() => _SuggestionPageState();
+}
+
+class _SuggestionPageState extends State<SuggestionPage> {
+  void dislike() {
+    widget.registryItem.disliked();
+    setState(() {});
+  }
+
+  void like() {
+    widget.registryItem.liked();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        bottomNavigationBar: SuggestionNavbar(registryItem),
+        bottomNavigationBar: SuggestionNavbar(widget.registryItem,
+            onDislike: dislike, onLike: like),
         body: Container(
           margin: EdgeInsets.only(
             top: 30.height,
@@ -32,8 +50,12 @@ class SuggestionPage extends StatelessWidget {
                 children: [
                   PopBackButton(),
                   ShareButton(
-                    action: () {
-                      //TODO поделиться
+                    action: () async {
+                      await FlutterShare.share(
+                          title: 'Поделиться ссылкой на предложение',
+                          chooserTitle: 'Поделиться ссылкой на предложение',
+                          linkUrl:
+                              'http://poc.deeplink.flutter.dev/channel/as8ght7vc');
                     },
                   )
                 ],
@@ -42,7 +64,7 @@ class SuggestionPage extends StatelessWidget {
                 height: 10.height,
               ),
               Text(
-                "Упрощение технологии технологического подключения",
+                widget.registryItem.title,
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 24.height,
@@ -57,11 +79,11 @@ class SuggestionPage extends StatelessWidget {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        SuggestionInfo(registryItem),
+                        SuggestionInfo(widget.registryItem),
                         SizedBox(
                           height: 15.height,
                         ),
-                        SuggestionText(registryItem),
+                        SuggestionText(widget.registryItem),
                       ],
                     ),
                   ),

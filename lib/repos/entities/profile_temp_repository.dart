@@ -2,9 +2,9 @@
 import 'package:rosseti/models/profile.dart';
 
 class ProfileTempRepository {
-  String name = '';
-  String surname = '';
-  String secondName = '';
+  String name = ' ';
+  String surname = ' ';
+  String secondName = ' ';
   String phone = '';
   String _email = '';
   String get email=>_email;
@@ -17,14 +17,12 @@ class ProfileTempRepository {
  int messagesCount;
  int approvedSuggestions;
 
-  String firstPage;
-  String secondPage;
-  String avatar;
+  
 
   void clear() {
-    name = '';
-    surname = '';
-    secondName = '';
+    name = ' ';
+    surname = ' ';
+    secondName = ' ';
     phone = '';
     _email = '';
     education = '';
@@ -56,6 +54,7 @@ class ProfileTempRepository {
     phone=profile.phone;
     education=profile.education;
     post=profile.post;
+    _email=profile.email;
     birthday=profile.birthday;
     startWorking=profile.startWorking;
     birthday=profile.birthday;

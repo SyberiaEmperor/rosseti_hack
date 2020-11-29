@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rosseti/UI/classes/responsive_size.dart';
 import 'package:rosseti/bloc/authenticated_bloc/authenticated_bloc.dart';
 import 'package:rosseti/helpers/validators.dart';
 import 'package:rosseti/widgets/input_field.dart';
@@ -49,10 +50,11 @@ class _AuthTextFieldState extends State<AuthTextField> {
                 keyboardType: TextInputType.emailAddress,
               ),
               SizedBox(
-                height: 12,
+                height: 12.height,
               ),
               InputField(
                 textCapitalization: TextCapitalization.none,
+                obscureText: true,
                 initialValue: state.defaultPassword,
                 onChanged: (v) {
                   authBloc.add(PasswordChangeEvent(v.trim()));

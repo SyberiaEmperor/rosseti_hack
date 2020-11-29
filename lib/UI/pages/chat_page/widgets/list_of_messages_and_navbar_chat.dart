@@ -4,21 +4,20 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:rosseti/UI/classes/responsive_size.dart';
 import 'package:rosseti/helpers/chat/chat_controller.dart';
 import 'package:rosseti/models/message.dart';
+import 'package:rosseti/models/profile.dart';
 
 import 'chat_message.dart';
 import 'navbar_action_button.dart';
 
 class ListOfMessagesAndNavbarChat extends StatefulWidget {
   final int chatID; // ID чата
-  final int userID;
-  //final User user; // админ(кнопки по-умолчанию)/ номер телефона пользователя
+  final Profile
+      profile; // админ(кнопки по-умолчанию)/ номер телефона пользователя
   final void Function(BuildContext context, String message)
       showConnectionStatus;
 
   ListOfMessagesAndNavbarChat(
-      this.userID,
-      this.chatID,
-      /* this.user,*/ this.showConnectionStatus);
+      this.chatID, this.profile, this.showConnectionStatus);
 
   @override
   _ListOfMessagesAndNavbarChatState createState() =>
@@ -42,7 +41,7 @@ class _ListOfMessagesAndNavbarChatState
             listOfMessages[listOfMessages.length - 1].message.time.day;
     listOfMessages.add(
       ChatMessage(
-        userID: widget.userID,
+        userID: widget.profile.id,
         message: msg,
         chatID: widget.chatID,
         date: needDate,
@@ -69,11 +68,11 @@ class _ListOfMessagesAndNavbarChatState
 
   @override
   void initState() {
-    //Тестовый набор:
+    //Тестовые сообщения
     // listOfMessages = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     //     .map((e) => Message.test(e))
     //     .map((e) => ChatMessage(
-    //           userID: widget.userID,
+    //           userID: widget.profile.id,
     //           chatID: widget.chatID,
     //           message: e,
     //         ))
@@ -148,7 +147,7 @@ class _ListOfMessagesAndNavbarChatState
                         listOfMessages.insert(
                             0,
                             ChatMessage(
-                              userID: widget.userID,
+                              userID: widget.profile.id,
                               message: mes[i],
                               chatID: widget.chatID,
                             ));

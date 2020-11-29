@@ -1,21 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rosseti/UI/classes/responsive_size.dart';
+import 'package:rosseti/UI/pages/suggestion_page/bloc/suggestion_page_bloc.dart';
 import 'package:rosseti/UI/pages/suggestion_page/suggestion_page.dart';
+import 'package:rosseti/bloc/news_bloc/news_bloc.dart';
+import 'package:rosseti/bloc/news_bloc/news_event.dart';
 import 'package:rosseti/models/registry_item.dart';
+import 'package:rosseti/repos/entities/profile_repository.dart';
 
 class SuggestionItem extends StatelessWidget {
   final RegistryItem registryItem;
+  final SuggestionPageBloc bloc;
 
-  SuggestionItem(this.registryItem);
+  SuggestionItem(this.registryItem) : bloc = SuggestionPageBloc(registryItem);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(
+      onTap: () async {
+        await Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => SuggestionPage(registryItem),
+            builder: (_) => BlocProvider.value(
+                value: bloc, child: SuggestionPage(registryItem)),
           ),
         );
+        BlocProvider.of<NewsBloc>(context).add(Update(
+            RepositoryProvider.of<ProfileRepository>(context).currentData));
       },
       child: Container(
         margin: EdgeInsets.only(
@@ -33,7 +42,7 @@ class SuggestionItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  registryItem.author,
+                  "${registryItem.user.surname} ${registryItem.user.name[0]}. ${registryItem.user.secondName[0]}.",
                   style: TextStyle(
                     fontSize: 12.height,
                   ),
@@ -62,6 +71,8 @@ class SuggestionItem extends StatelessWidget {
               height: 42.height,
               child: Text(
                 registryItem.title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 14.height,

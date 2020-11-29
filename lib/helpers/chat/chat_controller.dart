@@ -112,6 +112,7 @@ class ChatController {
     _cable.performAction(_room, action: "receive", channelParams: {
       "chat_id": id,
     }, actionParams: {
+      "message": "",
       "picture": "data:image/jpeg;base64," + base64Encode(img),
       "type_message": TypeMessage.picture.index,
     });

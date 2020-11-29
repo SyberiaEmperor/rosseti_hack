@@ -1,12 +1,12 @@
 part of requests;
 
-Future<void> sendProfile(Profile profile) async {
+Future<Profile> sendProfile(Profile profile) async {
   //есть соединение
   String userId = parseJWT(token)['userId'].toString();
   final body = profile.toJson();
   http.Response response;
   try {
-    response = await http.post(url + "v1/user/" + userId + '/profile',
+    response = await http.put(url + "user/",
         body: jsonEncode(body),
         headers: {
           HttpHeaders.contentTypeHeader: 'application/json',
@@ -16,19 +16,20 @@ Future<void> sendProfile(Profile profile) async {
   } on Exception {
     throw SendingDataFailure();
   }
-  if (response?.statusCode != 201) {
+  if (response?.statusCode != 200) {
     if (response?.statusCode == 401) {
       throw ExpiredToken();
     } else {
       throw SendingDataFailure();
     }
+  } else{
+    return Profile.fromJson(jsonDecode(response.body));
   }
 }
 
 Future<Profile> getProfile() async {
   http.Response response;
   try {
-    String userId = parseJWT(token)['userId'].toString();
     response = await http.get(
       url + "user/",
       headers: {
@@ -40,7 +41,6 @@ Future<Profile> getProfile() async {
   } on Exception {
     throw GettingDataFailure();
   }
-
   if (response?.statusCode == 200) {
     return Profile.fromJson(jsonDecode(response.body));
   } else {

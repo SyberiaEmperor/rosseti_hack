@@ -2,29 +2,35 @@ import 'dart:io';
 import 'package:rosseti/models/author.dart';
 import 'package:rosseti/models/expense.dart';
 import 'package:rosseti/models/stage.dart';
-import 'package:json_annotation/json_annotation.dart';
-
 part 'application.g.dart';
 
 //@JsonSerializable(nullable: true)
 class Application {
   final int id;
   final String title;
+  final String filePath;
   final String problem;
   final String decision;
+  final String impact;
+  final String category;
   final bool economy;
+  final List<int> id_likers;
   final List<Author> other_authors;
   final List<Expense> expenses;
   final List<Stage> stages;
-  final File file;
-  final File doc_app;
+  final String fileUrl;
   final int count_likes;
   final String created_at;
   final String updated_at;
   final int chat_id;
+  final String mainAuthor;
 
   Application(
       {this.id,
+      this.filePath,
+      this.category,
+      this.impact,
+      this.id_likers,
       this.title,
       this.problem,
       this.decision,
@@ -32,12 +38,12 @@ class Application {
       this.other_authors,
       this.expenses,
       this.stages,
-      this.file,
-      this.doc_app,
+      this.fileUrl,
       this.count_likes,
       this.created_at,
       this.updated_at,
-      this.chat_id});
+      this.chat_id,
+      this.mainAuthor});
 
   factory Application.fromJson(Map<String, dynamic> json) =>
       _$ApplicationFromJson(json);

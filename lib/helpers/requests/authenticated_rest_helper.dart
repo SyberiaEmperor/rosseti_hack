@@ -1,6 +1,6 @@
 part of requests;
 
-singIn(String login, String password) async {
+Future<void> singIn(String login, String password) async {
   http.Response response;
   try {
     response = await http.post(

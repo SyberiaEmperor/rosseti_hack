@@ -70,30 +70,43 @@ class ChatMessage extends StatelessWidget {
             Radius.circular(10),
           ),
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.end,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              constraints: BoxConstraints(
-                maxWidth: ResponsiveSize.width(219),
-              ),
-              child: Linkify(
-                onOpen: (link) => Launcher.launch(link.url),
-                text: message.content,
-                options: LinkifyOptions(humanize: false),
-                style: TextStyle(
-                  fontSize: ResponsiveSize.height(18),
-                  color: Theme.of(context).textTheme.bodyText1.color,
+            if (message.senderId != userID)
+              Padding(
+                padding: EdgeInsets.only(bottom: 6.0.width, top: 3.0.width),
+                child: Text(
+                  message.senderName,
+                  style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 14),
                 ),
               ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Container(
+                  constraints: BoxConstraints(
+                    maxWidth: ResponsiveSize.width(219),
+                  ),
+                  child: Linkify(
+                    onOpen: (link) => Launcher.launch(link.url),
+                    text: message.content,
+                    options: LinkifyOptions(humanize: false),
+                    style: TextStyle(
+                      fontSize: ResponsiveSize.height(18),
+                      color: Theme.of(context).textTheme.bodyText1.color,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: ResponsiveSize.width(5),
+                ),
+                message.type == TypeMessage.text
+                    ? _getTime()
+                    : _getTime(flag: true),
+              ],
             ),
-            SizedBox(
-              width: ResponsiveSize.width(5),
-            ),
-            message.type == TypeMessage.text
-                ? _getTime()
-                : _getTime(flag: true),
           ],
         ),
       );
@@ -125,7 +138,7 @@ class ChatMessage extends StatelessWidget {
           alignment: Alignment.bottomRight,
           children: [
             Hero(
-              tag: message.content + message.time.toString(),
+              tag: (message.content ?? " ") + message.time.toString(),
               child: Container(
                 height: ResponsiveSize.height(210),
                 width: ResponsiveSize.width(265),

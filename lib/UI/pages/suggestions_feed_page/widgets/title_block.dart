@@ -64,7 +64,6 @@ class TitleBlock extends StatelessWidget {
                   alignment: Alignment.center,
                   child: GestureDetector(
                     onTap: (){
-                      //TODO подробная статистика
                     },
                     child: Text(
                       "Подробная статистика",
